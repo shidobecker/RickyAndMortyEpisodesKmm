@@ -20,9 +20,29 @@ dependencies {
     implementation(Compose.activity)
     implementation(Compose.navigation)
 
+
     implementation(Google.material)
 
+    implementation(Jetpack.navigationFragment)
+    implementation(Jetpack.navigationUi)
+
+    // Koin main features for Android (Scope,ViewModel ...)
+    implementation(Koin.koinAndroid)
+
+    // Koin for Jetpack WorkManager
+    implementation(Koin.koinWorkManager)
+
+    // Koin for Jetpack Compose (unstable version)
+    implementation(Koin.koinCompose)
+
+    testImplementation(Koin.koinJUnit4)
+    testImplementation(Koin.koinJUnit5)
+
     implementation(Kotlinx.datetime)
+
+    implementation(Timber.timber)
+
+
 }
 
 android {

@@ -1,0 +1,15 @@
+query fetchEpisodesList($page: Int){
+  episodes(page : $page){
+    results{
+        ...EpisodeResultFields
+    }
+  }
+}
+
+fragment EpisodeResultFields on Episode{
+      id
+      name
+      air_date
+      episode
+      created
+}
