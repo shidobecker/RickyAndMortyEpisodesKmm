@@ -4,16 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.ExperimentalUnitApi
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import br.com.shido.rickyandmortyepisodeskmm.android.R
 import br.com.shido.rickyandmortyepisodeskmm.android.components.CardContainer
 import br.com.shido.rickyandmortyepisodeskmm.android.components.ShimmerEpisodeCardItem
 import br.com.shido.rickyandmortyepisodeskmm.android.episode_list.viewmodel.EpisodeListViewModel
@@ -26,6 +35,7 @@ class EpisodeListFragment : Fragment() {
 
     private val viewModel by sharedViewModel<EpisodeListViewModel>()
 
+    @ExperimentalUnitApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,16 +53,37 @@ class EpisodeListFragment : Fragment() {
         viewModel.fetchEpisodes()
     }
 
+    @ExperimentalUnitApi
     @Composable
     fun EpisodeListFragmentScreen() {
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.DarkGray),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             item {
-                Box(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
                 ) {
-                    Text("Ricky and Morty Episode Guide")
+                    Image(
+                        painter = painterResource(id = R.drawable.ricky),
+                        contentDescription = null
+                    )
+
+                    Text(
+                        color = Color.White,
+                        fontSize = regularText,
+                        fontWeight = FontWeight.Bold,
+                        text = "Episode Guide",
+                        modifier = Modifier.align(Alignment.End)
+                    )
+
+
                 }
             }
 
@@ -73,13 +104,31 @@ class EpisodeListFragment : Fragment() {
 
     }
 
+    @ExperimentalUnitApi
     @Composable
     fun EpisodeList(episode: Episode) {
-        CardContainer {
-            Column() {
-                Text(color = Color.Black, text = episode.name)
+        CardContainer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            backgroundColor = Color.Black
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    color = Color.White,
+                    text = episode.name,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = bigText
+                )
+                Text(color = Color.LightGray, text = episode.episode)
+                Text(color = Color.LightGray, text = "Air Date: ${episode.airDate}")
             }
         }
     }
 }
+
+@ExperimentalUnitApi
+val bigText = TextUnit(20f, TextUnitType.Sp)
+@ExperimentalUnitApi
+val regularText = TextUnit(16f, TextUnitType.Sp)
 
