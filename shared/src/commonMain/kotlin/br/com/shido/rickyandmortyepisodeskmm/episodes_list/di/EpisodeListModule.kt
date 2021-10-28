@@ -1,5 +1,7 @@
 package br.com.shido.rickyandmortyepisodeskmm.episodes_list.di
 
+import br.com.shido.rickyandmortyepisodeskmm.apolloclient.ApolloProvider
+import br.com.shido.rickyandmortyepisodeskmm.apolloclient.MyLogger
 import br.com.shido.rickyandmortyepisodeskmm.datamapper.EpisodeDataMapper
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.datasource.EpisodesApollo
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.datasource.EpisodesDataSource
@@ -14,8 +16,9 @@ fun injectEpisodeListCommonModule() = loadFeature
 val commonModule = module {
     single<EpisodesRepository> { EpisodesRepositoryImpl(get(), get()) }
     factory { EpisodeListUseCase(get()) }
-    single<EpisodesDataSource> { EpisodesApollo() }
+    single<EpisodesDataSource> { EpisodesApollo(get()) }
     factory { EpisodeDataMapper() }
+    single { ApolloProvider(MyLogger()) }
 }
 
 

@@ -5,13 +5,13 @@ import com.apollographql.apollo.api.ApolloExperimental
 import com.apollographql.apollo.network.http.ApolloHttpNetworkTransport
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-object GraphQLApolloClient {
-
+class ApolloProvider(private val myLogger: MyLogger) {
 
     @ExperimentalCoroutinesApi
     @ApolloExperimental
     fun createClient(): ApolloClient {
         return ApolloClient(
+            interceptors = listOf(LoggingInterceptor(myLogger = myLogger)),
             networkTransport = ApolloHttpNetworkTransport(
                 serverUrl = "https://rickandmortyapi.com/graphql",
                 headers = mapOf(
@@ -20,6 +20,8 @@ object GraphQLApolloClient {
                 )
             ),
         )
+
     }
+
 
 }
