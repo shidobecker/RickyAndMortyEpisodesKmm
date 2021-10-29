@@ -13,7 +13,7 @@ import org.koin.dsl.module
 
 fun injectEpisodeListCommonModule() = loadFeature
 
-val commonModule = module {
+val episodesCommonModule = module {
     single<EpisodesRepository> { EpisodesRepositoryImpl(get(), get()) }
     factory { EpisodeListUseCase(get()) }
     single<EpisodesDataSource> { EpisodesApollo(get()) }
@@ -24,7 +24,7 @@ val commonModule = module {
 
 private val loadFeature by lazy {
     loadKoinModules(
-        listOf(commonModule)
+        listOf(episodesCommonModule)
     )
 }
 

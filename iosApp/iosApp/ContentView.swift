@@ -7,6 +7,7 @@ struct ContentView: View {
 	var body: some View {
         Text(greet).bold()
 	}
+
 }
 
 struct ContentView_Previews: PreviewProvider {

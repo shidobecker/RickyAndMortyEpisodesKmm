@@ -1,10 +1,19 @@
 import SwiftUI
+import shared
 
 @main
 struct iOSApp: App {
+    
+   private let iOSEpisodesComponent : IosEpisodesComponent = IosEpisodesComponent()
+    
+    init() {
+        IOSEpisodeModulesKt.doInitIosEpisodeDependencies()
+    }
+     
 	var body: some Scene {
 		WindowGroup {
-			ContentView()
+            let episodesUseCase = iOSEpisodesComponent.provideEpisodesUseCase()
+            EpisodeListScreen(episodesUseCase: episodesUseCase)
 		}
 	}
 }

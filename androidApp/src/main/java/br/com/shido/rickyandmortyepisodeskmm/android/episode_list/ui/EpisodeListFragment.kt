@@ -8,7 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,9 +26,10 @@ import br.com.shido.rickyandmortyepisodeskmm.android.R
 import br.com.shido.rickyandmortyepisodeskmm.android.components.CardContainer
 import br.com.shido.rickyandmortyepisodeskmm.android.components.ShimmerEpisodeCardItem
 import br.com.shido.rickyandmortyepisodeskmm.android.episode_list.viewmodel.EpisodeListViewModel
-import br.com.shido.rickyandmortyepisodeskmm.android.extensions.onLoading
-import br.com.shido.rickyandmortyepisodeskmm.android.extensions.onSuccess
+import br.com.shido.rickyandmortyepisodeskmm.episodes_list.constants.EPISODE_LIST_PAGE_SIZE
+import br.com.shido.rickyandmortyepisodeskmm.episodes_list.events.EpisodeListEvents
 import br.com.shido.rickyandmortyepisodeskmm.model.Episode
+import br.com.shido.rickyandmortyepisodeskmm.model.EpisodeListState
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class EpisodeListFragment : Fragment() {
@@ -43,19 +44,20 @@ class EpisodeListFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                EpisodeListFragmentScreen()
+                EpisodeListFragmentScreen(viewModel.episodesState.value)
             }
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.fetchEpisodes()
+        viewModel.onTriggerEvent(EpisodeListEvents.LoadEpisodes)
     }
+
 
     @ExperimentalUnitApi
     @Composable
-    fun EpisodeListFragmentScreen() {
+    fun EpisodeListFragmentScreen(state: EpisodeListState) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -82,12 +84,10 @@ class EpisodeListFragment : Fragment() {
                         text = "Episode Guide",
                         modifier = Modifier.align(Alignment.End)
                     )
-
-
                 }
             }
 
-            viewModel.episodesList.onLoading {
+            if (state.isLoading) {
                 item {
                     for (i in 1..10) {
                         ShimmerEpisodeCardItem(imageHeight = 100.dp)
@@ -95,11 +95,15 @@ class EpisodeListFragment : Fragment() {
                 }
             }
 
-            viewModel.episodesList.onSuccess { list ->
-                items(items = list) {
-                    EpisodeList(episode = it)
+            if (state.episodeList.isNotEmpty() && state.isLoading.not()) {
+                itemsIndexed(items = state.episodeList) { index, item ->
+                    if ((index + 1) >= (state.page * EPISODE_LIST_PAGE_SIZE) && state.isLoading.not()) {
+                        viewModel.onTriggerEvent(EpisodeListEvents.NextPage)
+                    }
+                    EpisodeList(episode = item)
                 }
             }
+
         }
 
     }
@@ -129,6 +133,7 @@ class EpisodeListFragment : Fragment() {
 
 @ExperimentalUnitApi
 val bigText = TextUnit(20f, TextUnitType.Sp)
+
 @ExperimentalUnitApi
 val regularText = TextUnit(16f, TextUnitType.Sp)
 
