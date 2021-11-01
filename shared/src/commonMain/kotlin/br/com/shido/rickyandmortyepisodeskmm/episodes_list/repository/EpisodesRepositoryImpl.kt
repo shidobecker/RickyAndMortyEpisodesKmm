@@ -3,6 +3,7 @@ package br.com.shido.rickyandmortyepisodeskmm.episodes_list.repository
 import br.com.shido.rickyandmortyepisodeskmm.datamapper.EpisodeDataMapper
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.datasource.EpisodesDataSource
 import br.com.shido.rickyandmortyepisodeskmm.exception.ApplicationException
+import br.com.shido.rickyandmortyepisodeskmm.exception.Error_Fetching_Episodes_Code
 import br.com.shido.rickyandmortyepisodeskmm.model.Episode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -15,10 +16,10 @@ class EpisodesRepositoryImpl(
     override fun fetchEpisodes(page: Int): Flow<List<Episode>> {
         return flow{
              dataSource.fetchEpisodesList(page).catch {
-                throw ApplicationException(it.message)
+                throw ApplicationException(Error_Fetching_Episodes_Code, it.message)
             }.collect { response ->
                 if(response.hasErrors()){
-                    throw ApplicationException(response.errors?.firstOrNull()?.message)
+                    throw ApplicationException(Error_Fetching_Episodes_Code, response.errors?.firstOrNull()?.message)
                 }else{
                     val fields = response.data?.episodes?.results?.mapNotNull { it?.fragments?.episodeResultFields }
                     fields?.let {

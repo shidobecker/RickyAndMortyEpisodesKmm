@@ -26,7 +26,6 @@ import br.com.shido.rickyandmortyepisodeskmm.android.R
 import br.com.shido.rickyandmortyepisodeskmm.android.components.CardContainer
 import br.com.shido.rickyandmortyepisodeskmm.android.components.ShimmerEpisodeCardItem
 import br.com.shido.rickyandmortyepisodeskmm.android.episode_list.viewmodel.EpisodeListViewModel
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.constants.EPISODE_LIST_PAGE_SIZE
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.events.EpisodeListEvents
 import br.com.shido.rickyandmortyepisodeskmm.model.Episode
 import br.com.shido.rickyandmortyepisodeskmm.model.EpisodeListState
@@ -97,7 +96,7 @@ class EpisodeListFragment : Fragment() {
 
             if (state.episodeList.isNotEmpty() && state.isLoading.not()) {
                 itemsIndexed(items = state.episodeList) { index, item ->
-                    if ((index + 1) >= (state.page * EPISODE_LIST_PAGE_SIZE) && state.isLoading.not()) {
+                    if (viewModel.shouldLoadMoreItems(index)) {
                         viewModel.onTriggerEvent(EpisodeListEvents.NextPage)
                     }
                     EpisodeList(episode = item)

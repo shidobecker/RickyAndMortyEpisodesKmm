@@ -1,27 +1,25 @@
 package br.com.shido.rickyandmortyepisodeskmm.model
 
+import br.com.shido.rickyandmortyepisodeskmm.exception.ApplicationException
+
 data class CommonDataState<T>(
     val data: T? = null,
     val isLoading: Boolean = false,
-    val errorMessage: String? = null,
+    val error: ApplicationException? = null
 ) {
 
     companion object {
-        fun <T> error(message: String?): CommonDataState<T> {
+        fun <T> error(error: ApplicationException?): CommonDataState<T> {
             return CommonDataState(
-                errorMessage = message,
+                error = error,
                 data = null,
             )
         }
 
-        fun <T> data(message: String? = null, data: T? = null, ): CommonDataState<T> {
-            return CommonDataState(
-                errorMessage = message,
-                data = data,
-            )
+        fun <T> data(data: T? = null): CommonDataState<T> {
+            return CommonDataState(data = data,)
         }
 
         fun <T> loading() = CommonDataState<T>(isLoading = true)
     }
-
 }

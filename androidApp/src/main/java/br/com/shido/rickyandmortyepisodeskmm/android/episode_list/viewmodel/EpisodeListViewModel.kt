@@ -24,9 +24,6 @@ class EpisodeListViewModel(private val useCase: EpisodeListUseCase) : ViewModel(
             EpisodeListEvents.NextPage -> {
                 nextPage()
             }
-            else -> {
-                //  handleError("Invalid Event")
-            }
         }
     }
 
@@ -39,20 +36,25 @@ class EpisodeListViewModel(private val useCase: EpisodeListUseCase) : ViewModel(
 
 
     private fun loadEpisodes() {
-        useCase.fetchEpisodes(_episodesListState.value.page).collectCommon(viewModelScope) { dataState ->
-            _episodesListState.value =
-                _episodesListState.value.copy(isLoading = dataState.isLoading, isIdle = false)
+        useCase.fetchEpisodes2(_episodesListState.value.page)
+            .collectCommon(viewModelScope) { dataState ->
+                val currentList = appendToEpisodeList(dataState.data ?: emptyList())
+                _episodesListState.value =
+                    _episodesListState.value.copy(
+                        isIdle = false,
+                        error = dataState.error,
+                        episodeList = currentList.toList(),
+                        isLoading = dataState.isLoading
+                    )
 
-            val currentList = appendToEpisodeList(dataState.data ?: emptyList())
-            _episodesListState.value =
-                _episodesListState.value.copy(
-                    episodeList = currentList.toList(),
-                    isLoading = dataState.isLoading
-                )
+            }
+    }
 
-        }
-
-
+    fun shouldLoadMoreItems(index: Int): Boolean {
+        return useCase.indexGreaterThanPage(
+            index,
+            _episodesListState.value.page
+        ) && _episodesListState.value.isLoading.not()
     }
 
     private fun appendToEpisodeList(fetchedList: List<Episode>): MutableList<Episode> {

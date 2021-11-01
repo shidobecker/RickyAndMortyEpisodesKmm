@@ -1,12 +1,12 @@
 package br.com.shido.rickyandmortyepisodeskmm.model
 
-
+import br.com.shido.rickyandmortyepisodeskmm.exception.ApplicationException
 
 
 data class EpisodeListState(
     val isIdle: Boolean = true,
     val isLoading: Boolean = false,
-    val errorHappened: Boolean = false,
+    val error: ApplicationException? = null,
     val page: Int = 1,
     val episodeList: List<Episode> = emptyList(),
 ) {
@@ -15,7 +15,7 @@ data class EpisodeListState(
         isIdle = true,
         isLoading = false,
         page = 1,
-        errorHappened = false,
+        error = null,
         episodeList = emptyList()
     )
 }

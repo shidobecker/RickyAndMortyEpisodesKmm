@@ -27,8 +27,8 @@ struct EpisodeListScreen: View {
         List{
             ForEach(viewModel.state.episodeList, id: \.self.id){episode in
                 Text(episode.name).onAppear(perform: {
-                    if episode == viewModel.state.episodeList.last && !viewModel.state.isLoading{
-                        
+                    if episode == viewModel.state.episodeList.last && viewModel.shouldLoadMoreItems(index: viewModel.state.episodeList.count - 1){
+                        //viewModel.onTriggerEvent(stateEvent: EpisodeListEvents.NextPage())
                     }
                 })
             }

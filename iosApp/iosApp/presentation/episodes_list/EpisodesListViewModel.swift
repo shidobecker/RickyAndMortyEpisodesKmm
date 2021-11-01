@@ -26,7 +26,7 @@ class EpisodesListViewModel: ObservableObject{
         self.state = self.state.doCopy(
             isIdle: currentState.isIdle,
             isLoading: isLoading ?? currentState.isLoading,
-            errorHappened: currentState.errorHappened,
+            error : currentState.error,
             page : Int32(page ?? Int(currentState.page)),
             episodeList : currentState.episodeList)
                 
@@ -37,7 +37,8 @@ class EpisodesListViewModel: ObservableObject{
         case is EpisodeListEvents.LoadEpisodes:
            loadEpisodes()
         case is EpisodeListEvents.NextPage:
-            doNothing()
+            nextPage()
+            
         default:
             doNothing()
         }
@@ -47,22 +48,39 @@ class EpisodesListViewModel: ObservableObject{
         
     }
     
+    func nextPage(){
+        let currentState = self.state.copy() as! EpisodeListState
+        updateState(isLoading: nil, page: Int(currentState.page) + 1)
+        loadEpisodes()
+    }
+    
+ 
     func loadEpisodes(){
         let currentState = (self.state.copy() as! EpisodeListState)
         
-        do{
-            try episodesUseCase.fetchEpisodes(page: state.page).collectCommon(coroutineScope: nil, callBack: { dataState in
+        print("Load Episodes")
+    
+         do{
+            try episodesUseCase.fetchEpisodes2(page: currentState.page).collectCommon(coroutineScope: nil, callBack: { dataState in
                 if dataState != nil{
+                    
+                    //Getting data
                     let data = dataState?.data
-                    let loading =  false
+                    
+                    let loading =  dataState?.isLoading
                 
                     self.updateState(isLoading: loading)
                     
                     if data != nil{
                         self.appendEpisodes(episodes: data as! [Episode])
                     }
-                    
-                    
+               
+                    //Handle error from CommonDataState
+                    let errorState  = dataState?.error
+                    let isDefaultException = errorState?.isDefaultApplicationException()
+                    let errorCode = errorState?.code
+                    let errorMessage = errorState?.message
+                                        
                 }
                 
             })
@@ -72,14 +90,23 @@ class EpisodesListViewModel: ObservableObject{
         
     }
     
+    
+    func shouldLoadMoreItems(index: Int) -> Bool{
+        let shouldLoad = episodesUseCase.indexGreaterThanPage(index: Int32(index) , page: state.page)
+        print("Should Load: \(shouldLoad)")
+        return episodesUseCase.indexGreaterThanPage(index: Int32(index) , page: state.page)
+    }
+    
+ 
+    
     func appendEpisodes(episodes: [Episode]){
-        var currentState = self.state.copy() as! EpisodeListState
+        let currentState = self.state.copy() as! EpisodeListState
         var currentEpisodes = currentState.episodeList
         currentEpisodes.append(contentsOf: episodes)
         self.state = self.state.doCopy(
             isIdle : currentState.isIdle,
             isLoading : currentState.isLoading,
-            errorHappened: false,
+            error : currentState.error,
             page : currentState.page,
             episodeList : currentEpisodes
         )
