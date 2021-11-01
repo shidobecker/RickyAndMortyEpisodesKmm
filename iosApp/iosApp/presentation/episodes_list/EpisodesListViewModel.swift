@@ -38,7 +38,6 @@ class EpisodesListViewModel: ObservableObject{
            loadEpisodes()
         case is EpisodeListEvents.NextPage:
             nextPage()
-            
         default:
             doNothing()
         }
@@ -50,11 +49,12 @@ class EpisodesListViewModel: ObservableObject{
     
     func nextPage(){
         let currentState = self.state.copy() as! EpisodeListState
-        updateState(isLoading: nil, page: Int(currentState.page) + 1)
+        updateState(isLoading: nil, page: (Int(currentState.page) + 1))
         loadEpisodes()
     }
     
- 
+    
+    
     func loadEpisodes(){
         let currentState = (self.state.copy() as! EpisodeListState)
         

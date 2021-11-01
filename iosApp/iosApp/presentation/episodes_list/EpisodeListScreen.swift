@@ -15,7 +15,7 @@ struct EpisodeListScreen: View {
     private let episodesUseCase : EpisodeListUseCase
     
     @ObservedObject var viewModel: EpisodesListViewModel
-
+    
     
     init(episodesUseCase: EpisodeListUseCase){
         self.episodesUseCase = episodesUseCase
@@ -23,18 +23,38 @@ struct EpisodeListScreen: View {
     }
     
     
+    
+    
     var body: some View {
-        List{
-            ForEach(viewModel.state.episodeList, id: \.self.id){episode in
-                Text(episode.name).onAppear(perform: {
-                    if episode == viewModel.state.episodeList.last && viewModel.shouldLoadMoreItems(index: viewModel.state.episodeList.count - 1){
-                        //viewModel.onTriggerEvent(stateEvent: EpisodeListEvents.NextPage())
-                    }
+        
+        ZStack{
+            VStack{
+                Image("ricky")
+                    .renderingMode(.original)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .scaledToFit()
+                    .padding(.top, 10).padding(.leading, 10.0).padding(.trailing, 10)
+                
+                Text("Episode Guide").frame(maxWidth: .infinity, alignment: .trailing)
+                
+                EpisodeList(episodeList: viewModel.state.episodeList, onNextPage: {
+                    viewModel.onTriggerEvent(stateEvent: EpisodeListEvents.NextPage())
                 })
+                
+                if viewModel.state.episodeList.count > 0 && viewModel.state.isLoading{
+                    ProgressView("Searching more episodes..")
+
+                }
+                
+            }.frame(maxWidth: .infinity, maxHeight: .infinity)
+            
+            if viewModel.state.isLoading {
+                ProgressView("Searching Episodes..")
             }
         }
-    
+     
     }
+  
 }
-
  

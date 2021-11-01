@@ -60,7 +60,7 @@ class EpisodeListFragment : Fragment() {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color.DarkGray),
+                .background(color = Color.White),
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -77,7 +77,7 @@ class EpisodeListFragment : Fragment() {
                     )
 
                     Text(
-                        color = Color.White,
+                        color = Color.DarkGray,
                         fontSize = regularText,
                         fontWeight = FontWeight.Bold,
                         text = "Episode Guide",
@@ -113,18 +113,24 @@ class EpisodeListFragment : Fragment() {
         CardContainer(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
+                .padding(bottom = 8.dp),
             backgroundColor = Color.Black
         ) {
-            Column(modifier = Modifier.padding(16.dp)) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text(
                     color = Color.White,
                     text = episode.name,
                     fontWeight = FontWeight.Bold,
                     fontSize = bigText
                 )
-                Text(color = Color.LightGray, text = episode.episode)
-                Text(color = Color.LightGray, text = "Air Date: ${episode.airDate}")
+                Text(color = Color.LightGray, text = episode.episode, modifier = Modifier.padding(top = 4.dp))
+                Text(color = Color.LightGray, text = "Air Date: ${episode.airDate}", modifier = Modifier.padding(top = 4.dp))
             }
         }
     }

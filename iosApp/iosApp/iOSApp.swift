@@ -11,6 +11,7 @@ struct iOSApp: App {
     }
      
 	var body: some Scene {
+        
 		WindowGroup {
             let episodesUseCase = iOSEpisodesComponent.provideEpisodesUseCase()
             EpisodeListScreen(episodesUseCase: episodesUseCase)
