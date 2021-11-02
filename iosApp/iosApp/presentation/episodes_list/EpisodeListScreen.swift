@@ -29,6 +29,7 @@ struct EpisodeListScreen: View {
         
         ZStack{
             VStack{
+                
                 Image("ricky")
                     .renderingMode(.original)
                     .resizable()
@@ -36,15 +37,17 @@ struct EpisodeListScreen: View {
                     .scaledToFit()
                     .padding(.top, 10).padding(.leading, 10.0).padding(.trailing, 10)
                 
-                Text("Episode Guide").frame(maxWidth: .infinity, alignment: .trailing)
+                Text("Episode Guide")
+                    .bold().foregroundColor(.white)
+                    .frame(maxWidth: .infinity, alignment: .trailing).padding(.trailing, 16)
                 
+   
                 EpisodeList(episodeList: viewModel.state.episodeList, onNextPage: {
                     viewModel.onTriggerEvent(stateEvent: EpisodeListEvents.NextPage())
                 })
                 
                 if viewModel.state.episodeList.count > 0 && viewModel.state.isLoading{
-                    ProgressView("Searching more episodes..")
-
+                    ProgressView("Searching more episodes..").foregroundColor(.white).progressViewStyle(CircularProgressViewStyle(tint: Color.white))
                 }
                 
             }.frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -52,7 +55,9 @@ struct EpisodeListScreen: View {
             if viewModel.state.isLoading {
                 ProgressView("Searching Episodes..")
             }
-        }
+            
+            
+        }.background(Color.black)
      
     }
   

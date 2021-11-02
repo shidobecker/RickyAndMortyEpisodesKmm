@@ -7,6 +7,8 @@ dependencies {
     implementation(project(":shared"))
     implementation(AndroidX.appCompat)
 
+    //implementation(Accompanist.accompanistSystemUi)
+
     implementation(Compose.runtime)
     implementation(Compose.runtimeLiveData)
     implementation(Compose.ui)
@@ -41,7 +43,6 @@ dependencies {
     implementation(Kotlinx.datetime)
 
     implementation(Timber.timber)
-
 
 }
 

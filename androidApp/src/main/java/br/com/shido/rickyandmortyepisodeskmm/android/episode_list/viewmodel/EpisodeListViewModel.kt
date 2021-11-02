@@ -4,10 +4,15 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.shido.rickyandmortyepisodeskmm.android.extensions.w
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.events.EpisodeListEvents
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.usecase.EpisodeListUseCase
 import br.com.shido.rickyandmortyepisodeskmm.model.Episode
 import br.com.shido.rickyandmortyepisodeskmm.model.EpisodeListState
+import android.graphics.drawable.Drawable
+
+
+
 
 class EpisodeListViewModel(private val useCase: EpisodeListUseCase) : ViewModel() {
 
@@ -63,5 +68,7 @@ class EpisodeListViewModel(private val useCase: EpisodeListUseCase) : ViewModel(
         currentList.addAll(fetchedList)
         return currentList
     }
+
+
 
 }

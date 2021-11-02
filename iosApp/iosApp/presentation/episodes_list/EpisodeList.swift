@@ -26,6 +26,8 @@ struct EpisodeList :  View{
         
         List{
  
+  
+            
             ForEach(episodeList, id: \.self.id){episode in
                 EpisodeCard(episode: episode).onAppear(perform: {
                     
@@ -35,7 +37,10 @@ struct EpisodeList :  View{
                     
                     
                 })
-            }.background(Color.black)
+            }
+            
+            .listRowBackground(Color.black)
+            
         }.listStyle(PlainListStyle())
         
     }

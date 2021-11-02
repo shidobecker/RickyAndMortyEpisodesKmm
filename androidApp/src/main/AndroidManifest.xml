@@ -10,7 +10,7 @@
     android:allowBackup="false"
     android:label="Rick and Morty Episodes"
     android:supportsRtl="true"
-    android:theme="@style/AppTheme">
+    android:theme="@style/Theme.ThemeLight">
     <activity
       android:name=".MainActivity"
       android:exported="true">
