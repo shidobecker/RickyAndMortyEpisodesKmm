@@ -35,8 +35,8 @@ import br.com.shido.rickyandmortyepisodeskmm.android.components.CardContainer
 import br.com.shido.rickyandmortyepisodeskmm.android.components.ShimmerEpisodeCardItem
 import br.com.shido.rickyandmortyepisodeskmm.android.episode_list.viewmodel.EpisodeListViewModel
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.events.EpisodeListEvents
-import br.com.shido.rickyandmortyepisodeskmm.model.Episode
-import br.com.shido.rickyandmortyepisodeskmm.model.EpisodeListState
+import br.com.shido.rickyandmortyepisodeskmm.episodes_list.model.Episode
+import br.com.shido.rickyandmortyepisodeskmm.episodes_list.model.EpisodeListState
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class EpisodeListFragment : Fragment() {

@@ -5,7 +5,10 @@ plugins {
     id(Plugins.androidLibrary)
 
     id(Apollo.apolloPluginId).version(Apollo.apolloVersion)
+    kotlin("kapt")
+
 }
+
 
 kotlin {
     android()
@@ -46,9 +49,15 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
+
             }
         }
-        val androidMain by getting
+        val androidMain by getting{
+            dependencies{
+                implementation ("androidx.room:room-runtime:2.3.0")
+
+            }
+        }
         val androidTest by getting {
             dependencies {
                 implementation(kotlin("test-junit"))
@@ -58,6 +67,10 @@ kotlin {
         val iosMain by getting
         val iosTest by getting
     }
+}
+
+dependencies {
+    "kapt"("androidx.room:room-compiler:2.3.0")
 }
 
 android {

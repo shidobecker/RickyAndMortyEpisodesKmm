@@ -1,4 +1,4 @@
-package br.com.shido.rickyandmortyepisodeskmm.model
+package br.com.shido.rickyandmortyepisodeskmm.episodes_list.model
 
 import br.com.shido.rickyandmortyepisodeskmm.exception.ApplicationException
 

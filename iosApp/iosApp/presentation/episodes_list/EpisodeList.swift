@@ -25,9 +25,6 @@ struct EpisodeList :  View{
     var body: some View {
         
         List{
- 
-  
-            
             ForEach(episodeList, id: \.self.id){episode in
                 EpisodeCard(episode: episode).onAppear(perform: {
                     

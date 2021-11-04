@@ -1,4 +1,4 @@
-package br.com.shido.rickyandmortyepisodeskmm.model
+package br.com.shido.rickyandmortyepisodeskmm.episodes_list.model
 
 data class Episode(
     val id: String,

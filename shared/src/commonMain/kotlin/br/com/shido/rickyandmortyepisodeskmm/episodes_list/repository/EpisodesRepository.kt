@@ -1,6 +1,6 @@
 package br.com.shido.rickyandmortyepisodeskmm.episodes_list.repository
 
-import br.com.shido.rickyandmortyepisodeskmm.model.Episode
+import br.com.shido.rickyandmortyepisodeskmm.episodes_list.model.Episode
 import kotlinx.coroutines.flow.Flow
 
 interface EpisodesRepository {

@@ -4,14 +4,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.shido.rickyandmortyepisodeskmm.android.extensions.w
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.events.EpisodeListEvents
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.usecase.EpisodeListUseCase
-import br.com.shido.rickyandmortyepisodeskmm.model.Episode
-import br.com.shido.rickyandmortyepisodeskmm.model.EpisodeListState
-import android.graphics.drawable.Drawable
-
-
+import br.com.shido.rickyandmortyepisodeskmm.episodes_list.model.Episode
+import br.com.shido.rickyandmortyepisodeskmm.episodes_list.model.EpisodeListState
 
 
 class EpisodeListViewModel(private val useCase: EpisodeListUseCase) : ViewModel() {
@@ -20,6 +16,20 @@ class EpisodeListViewModel(private val useCase: EpisodeListUseCase) : ViewModel(
         mutableStateOf(EpisodeListState())
     val episodesState get() = _episodesListState
 
+    private fun loadEpisodes() {
+        useCase.fetchEpisodes(_episodesListState.value.page)
+            .collectCommon(viewModelScope) { dataState ->
+                val currentList = appendEpisodes(dataState.data ?: emptyList())
+                _episodesListState.value =
+                    _episodesListState.value.copy(
+                        isIdle = false,
+                        error = dataState.error,
+                        episodeList = currentList.toList(),
+                        isLoading = dataState.isLoading
+                    )
+
+            }
+    }
 
     fun onTriggerEvent(event: EpisodeListEvents) {
         when (event) {
@@ -40,20 +50,7 @@ class EpisodeListViewModel(private val useCase: EpisodeListUseCase) : ViewModel(
     }
 
 
-    private fun loadEpisodes() {
-        useCase.fetchEpisodes2(_episodesListState.value.page)
-            .collectCommon(viewModelScope) { dataState ->
-                val currentList = appendToEpisodeList(dataState.data ?: emptyList())
-                _episodesListState.value =
-                    _episodesListState.value.copy(
-                        isIdle = false,
-                        error = dataState.error,
-                        episodeList = currentList.toList(),
-                        isLoading = dataState.isLoading
-                    )
 
-            }
-    }
 
     fun shouldLoadMoreItems(index: Int): Boolean {
         return useCase.indexGreaterThanPage(
@@ -62,7 +59,7 @@ class EpisodeListViewModel(private val useCase: EpisodeListUseCase) : ViewModel(
         ) && _episodesListState.value.isLoading.not()
     }
 
-    private fun appendToEpisodeList(fetchedList: List<Episode>): MutableList<Episode> {
+    private fun appendEpisodes(fetchedList: List<Episode>): MutableList<Episode> {
         val currentList = mutableListOf<Episode>()
         currentList.addAll(_episodesListState.value.episodeList)
         currentList.addAll(fetchedList)

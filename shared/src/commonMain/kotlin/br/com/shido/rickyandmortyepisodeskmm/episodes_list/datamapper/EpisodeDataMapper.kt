@@ -1,7 +1,7 @@
-package br.com.shido.rickyandmortyepisodeskmm.datamapper
+package br.com.shido.rickyandmortyepisodeskmm.episodes_list.datamapper
 
 import br.com.shido.rickyandmortyepisodeskmm.fragment.EpisodeResultFields
-import br.com.shido.rickyandmortyepisodeskmm.model.Episode
+import br.com.shido.rickyandmortyepisodeskmm.episodes_list.model.Episode
 
 class EpisodeDataMapper : ResponseToDomain<EpisodeResultFields, Episode> {
 

@@ -2,7 +2,7 @@ package br.com.shido.rickyandmortyepisodeskmm.episodes_list.di
 
 import br.com.shido.rickyandmortyepisodeskmm.apolloclient.ApolloProvider
 import br.com.shido.rickyandmortyepisodeskmm.apolloclient.MyLogger
-import br.com.shido.rickyandmortyepisodeskmm.datamapper.EpisodeDataMapper
+import br.com.shido.rickyandmortyepisodeskmm.episodes_list.datamapper.EpisodeDataMapper
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.datasource.EpisodesApollo
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.datasource.EpisodesDataSource
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.repository.EpisodesRepository

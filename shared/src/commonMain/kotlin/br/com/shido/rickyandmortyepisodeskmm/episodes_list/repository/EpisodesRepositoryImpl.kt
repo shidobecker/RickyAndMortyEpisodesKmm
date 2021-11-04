@@ -1,10 +1,10 @@
 package br.com.shido.rickyandmortyepisodeskmm.episodes_list.repository
 
-import br.com.shido.rickyandmortyepisodeskmm.datamapper.EpisodeDataMapper
+import br.com.shido.rickyandmortyepisodeskmm.episodes_list.datamapper.EpisodeDataMapper
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.datasource.EpisodesDataSource
 import br.com.shido.rickyandmortyepisodeskmm.exception.ApplicationException
 import br.com.shido.rickyandmortyepisodeskmm.exception.Error_Fetching_Episodes_Code
-import br.com.shido.rickyandmortyepisodeskmm.model.Episode
+import br.com.shido.rickyandmortyepisodeskmm.episodes_list.model.Episode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 

@@ -1,4 +1,4 @@
-package br.com.shido.rickyandmortyepisodeskmm.datamapper
+package br.com.shido.rickyandmortyepisodeskmm.episodes_list.datamapper
 
 interface ResponseToDomain<Response, Domain> {
 
