@@ -6,10 +6,28 @@ query fetchEpisodesList($page: Int){
   }
 }
 
+
+query fetchEpisodeById($id: ID!){
+  episode(id : $id){
+       ...EpisodeResultFields
+  }
+}
+
 fragment EpisodeResultFields on Episode{
       id
       name
       air_date
       episode
       created
+      characters{
+        ...CharacterFields
+      }
+}
+
+fragment CharacterFields on Character{
+    id
+    name
+    status
+    species
+    image
 }

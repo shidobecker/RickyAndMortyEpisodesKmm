@@ -7,5 +7,17 @@
   <fragment
     android:id="@+id/episodeListFragment"
     android:name="br.com.shido.rickyandmortyepisodeskmm.android.episode_list.ui.EpisodeListFragment"
-    android:label="EpisodeListFragment" />
+    android:label="EpisodeListFragment">
+    <action
+      android:id="@+id/action_episodeListFragment_to_episodeDetailFragment"
+      app:destination="@id/episodeDetailFragment"
+      app:enterAnim="@anim/slide_in_alpha_right"
+      app:exitAnim="@anim/slide_out_alpha_left"
+      app:popEnterAnim="@anim/slide_in_alpha_left"
+      app:popExitAnim="@anim/slide_out_alpha_right" />
+  </fragment>
+  <fragment
+    android:id="@+id/episodeDetailFragment"
+    android:name="br.com.shido.rickyandmortyepisodeskmm.android.episode_detail.ui.EpisodeDetailFragment"
+    android:label="EpisodeDetailFragment" />
 </navigation>

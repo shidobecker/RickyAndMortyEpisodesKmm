@@ -42,6 +42,9 @@ dependencies {
 
     implementation(Kotlinx.datetime)
 
+    implementation(LandScapist.scapistGlide)
+    implementation(LandScapist.scapistCoil)
+
     implementation(Timber.timber)
 
 }

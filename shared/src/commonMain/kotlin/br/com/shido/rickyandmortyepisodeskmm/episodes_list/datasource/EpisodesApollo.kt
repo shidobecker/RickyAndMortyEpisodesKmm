@@ -1,5 +1,6 @@
 package br.com.shido.rickyandmortyepisodeskmm.episodes_list.datasource
 
+import br.com.shido.rickyandmortyepisodeskmm.FetchEpisodeByIdQuery
 import br.com.shido.rickyandmortyepisodeskmm.FetchEpisodesListQuery
 import br.com.shido.rickyandmortyepisodeskmm.apolloclient.ApolloProvider
 import com.apollographql.apollo.api.ApolloExperimental
@@ -14,6 +15,14 @@ class EpisodesApollo (private val apolloProvider: ApolloProvider) : EpisodesData
     @ExperimentalCoroutinesApi
     override fun fetchEpisodesList(page: Int): Flow<Response<FetchEpisodesListQuery.Data>> {
         val query = FetchEpisodesListQuery(Input.fromNullable(page))
+        return apolloProvider.createClient().query(query).execute()
+    }
+
+
+    @ApolloExperimental
+    @ExperimentalCoroutinesApi
+    override fun fetchEpisodeById(id: String): Flow<Response<FetchEpisodeByIdQuery.Data>> {
+        val query = FetchEpisodeByIdQuery(id)
         return apolloProvider.createClient().query(query).execute()
     }
 }

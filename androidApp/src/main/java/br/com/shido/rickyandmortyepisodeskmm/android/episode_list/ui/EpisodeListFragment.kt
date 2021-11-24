@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -30,9 +31,13 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import br.com.shido.rickyandmortyepisodeskmm.android.R
 import br.com.shido.rickyandmortyepisodeskmm.android.components.CardContainer
 import br.com.shido.rickyandmortyepisodeskmm.android.components.ShimmerEpisodeCardItem
+import br.com.shido.rickyandmortyepisodeskmm.android.components.bigText
+import br.com.shido.rickyandmortyepisodeskmm.android.components.regularText
+import br.com.shido.rickyandmortyepisodeskmm.android.episode_detail.ui.EpisodeDetailFragment
 import br.com.shido.rickyandmortyepisodeskmm.android.episode_list.viewmodel.EpisodeListViewModel
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.events.EpisodeListEvents
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.model.Episode
@@ -79,7 +84,16 @@ class EpisodeListFragment : Fragment() {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(brush = Brush.verticalGradient(listOf(Color.Black, Color.DarkGray, Color.LightGray, Color.Gray) )),
+                .background(
+                    brush = Brush.verticalGradient(
+                        listOf(
+                            Color.Black,
+                            Color.DarkGray,
+                            Color.LightGray,
+                            Color.Gray
+                        )
+                    )
+                ),
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -126,19 +140,31 @@ class EpisodeListFragment : Fragment() {
 
     }
 
+    private fun navigateToDetail(episodeId: String, episodeImage: String) {
+        val args = Bundle()
+        args.putString(EpisodeDetailFragment.EPISODE_ID_EXTRA, episodeId)
+        args.putString(EpisodeDetailFragment.EPISODE_IMAGE_EXTRA, episodeImage)
+        findNavController().navigate(R.id.action_episodeListFragment_to_episodeDetailFragment, args)
+    }
+
     @ExperimentalUnitApi
     @Composable
     fun EpisodeList(episode: Episode) {
         CardContainer(
             modifier = Modifier
+                .clickable {
+                    navigateToDetail(episode.id, episode.imageName)
+                }
                 .fillMaxWidth()
                 .padding(bottom = 8.dp),
             backgroundColor = Color.LightGray
         ) {
 
-            Column(modifier = Modifier
-                .fillMaxWidth()
-                .background(color = Color.LightGray)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = Color.LightGray)
+            ) {
                 Image(
                     bitmap = getImageByName(episode.imageName),
                     contentDescription = null,
@@ -190,20 +216,14 @@ class EpisodeListFragment : Fragment() {
         }
     }
 
-    fun getImageByName(name: String?): ImageBitmap {
+    private fun getImageByName(name: String?): ImageBitmap {
         val resourceId: Int = requireContext().resources
             .getIdentifier(name, "drawable", requireContext().packageName)
         val drawable = requireContext().resources.getDrawable(resourceId)
-        val bitmap = (drawable as BitmapDrawable).bitmap.asImageBitmap()
-        return bitmap
+        return (drawable as BitmapDrawable).bitmap.asImageBitmap()
     }
 
 }
 
 
-@ExperimentalUnitApi
-val bigText = TextUnit(20f, TextUnitType.Sp)
-
-@ExperimentalUnitApi
-val regularText = TextUnit(16f, TextUnitType.Sp)
 

@@ -7,13 +7,17 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class ApolloProvider(private val myLogger: MyLogger) {
 
+    companion object {
+        const val API_URL: String = "https://rickandmortyapi.com/graphql"
+    }
+
     @ExperimentalCoroutinesApi
     @ApolloExperimental
     fun createClient(): ApolloClient {
         return ApolloClient(
             interceptors = listOf(LoggingInterceptor(myLogger = myLogger)),
             networkTransport = ApolloHttpNetworkTransport(
-                serverUrl = "https://rickandmortyapi.com/graphql",
+                serverUrl = API_URL,
                 headers = mapOf(
                     "Accept" to "application/json",
                     "Content-Type" to "application/json",

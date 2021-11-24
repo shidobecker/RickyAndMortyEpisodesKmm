@@ -2,6 +2,7 @@ package br.com.shido.rickyandmortyepisodeskmm.episodes_list.di
 
 import br.com.shido.rickyandmortyepisodeskmm.apolloclient.ApolloProvider
 import br.com.shido.rickyandmortyepisodeskmm.apolloclient.MyLogger
+import br.com.shido.rickyandmortyepisodeskmm.episodes_list.datamapper.CharacterDataMapper
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.datamapper.EpisodeDataMapper
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.datasource.EpisodesApollo
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.datasource.EpisodesDataSource
@@ -17,7 +18,8 @@ val episodesCommonModule = module {
     single<EpisodesRepository> { EpisodesRepositoryImpl(get(), get()) }
     factory { EpisodeListUseCase(get()) }
     single<EpisodesDataSource> { EpisodesApollo(get()) }
-    factory { EpisodeDataMapper() }
+    factory { CharacterDataMapper() }
+    factory { EpisodeDataMapper(get()) }
     single { ApolloProvider(MyLogger()) }
 }
 

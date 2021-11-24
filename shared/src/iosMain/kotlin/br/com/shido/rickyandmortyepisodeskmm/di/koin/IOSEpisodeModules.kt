@@ -1,6 +1,8 @@
 package br.com.shido.rickyandmortyepisodeskmm.di.koin
 
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.di.episodesCommonModule
+import br.com.shido.rickyandmortyepisodeskmm.episodes_list.di.episodesDetailCommonModule
+import br.com.shido.rickyandmortyepisodeskmm.episodes_list.usecase.EpisodeDetailUseCase
 import br.com.shido.rickyandmortyepisodeskmm.episodes_list.usecase.EpisodeListUseCase
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
@@ -8,11 +10,12 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
 fun initIosEpisodeDependencies() = startKoin {
-    modules(episodesCommonModule, iosModule)
+    modules(episodesCommonModule, episodesDetailCommonModule, iosModule)
 }
 
 private val iosModule = module {
     factory { EpisodeListUseCase(get()) }
+    factory { EpisodeDetailUseCase(get()) }
 
 }
 
@@ -22,4 +25,5 @@ private val iosModule = module {
  */
 class IosEpisodesComponent : KoinComponent {
     fun provideEpisodesUseCase(): EpisodeListUseCase = get()
+    fun provideEpisodeDetailUseCase(): EpisodeDetailUseCase = get()
 }
