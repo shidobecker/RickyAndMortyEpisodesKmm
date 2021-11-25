@@ -26,20 +26,28 @@ struct EpisodeList :  View{
         
         List{
             ForEach(episodeList, id: \.self.id){episode in
-                EpisodeCard(episode: episode).onAppear(perform: {
+                
+                ZStack{
+                    EpisodeCard(episode: episode).onAppear(perform: {
+                        
+                        if(episodeList.last?.id == episode.id){
+                            onNextPage()
+                        }
+                    })
                     
-                    if(episodeList.last?.id == episode.id){
-                        onNextPage()
+                    
+                    NavigationLink(destination: EpisodeDetailScreen(episodeId: episode.id)){
+                        EmptyView()
                     }
                     
-                    
-                })
-            }
-            
-            .listRowBackground(Color.black)
+                }
+                
+                
+                
+            }.listRowBackground(Color.black)
             
         }.listStyle(PlainListStyle())
         
     }
     
- }
+}

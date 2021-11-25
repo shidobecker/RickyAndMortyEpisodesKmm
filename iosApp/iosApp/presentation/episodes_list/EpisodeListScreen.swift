@@ -26,38 +26,41 @@ struct EpisodeListScreen: View {
     
     
     var body: some View {
-        
-        ZStack{
-            VStack{
+       NavigationView{
+            ZStack{
                 
-                Image("ricky")
-                    .renderingMode(.original)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .scaledToFit()
-                    .padding(.top, 10).padding(.leading, 10.0).padding(.trailing, 10)
+                VStack{
+                    
+                    Image("ricky")
+                        .renderingMode(.original)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .scaledToFit()
+                        .padding(.top, 10).padding(.leading, 10.0).padding(.trailing, 10)
+                    
+                    Text("Episode Guide")
+                        .bold().foregroundColor(.white)
+                        .frame(maxWidth: .infinity, alignment: .trailing).padding(.trailing, 16)
+                    
+       
+                    EpisodeList(episodeList: viewModel.state.episodeList, onNextPage: {
+                        viewModel.onTriggerEvent(stateEvent: EpisodeListEvents.NextPage())
+                    })
+                    
+                    if viewModel.state.episodeList.count > 0 && viewModel.state.isLoading{
+                        ProgressView("Searching more episodes..").foregroundColor(.white).progressViewStyle(CircularProgressViewStyle(tint: Color.white))
+                    }
+                    
+                }.frame(maxWidth: .infinity, maxHeight: .infinity)
                 
-                Text("Episode Guide")
-                    .bold().foregroundColor(.white)
-                    .frame(maxWidth: .infinity, alignment: .trailing).padding(.trailing, 16)
-                
-   
-                EpisodeList(episodeList: viewModel.state.episodeList, onNextPage: {
-                    viewModel.onTriggerEvent(stateEvent: EpisodeListEvents.NextPage())
-                })
-                
-                if viewModel.state.episodeList.count > 0 && viewModel.state.isLoading{
-                    ProgressView("Searching more episodes..").foregroundColor(.white).progressViewStyle(CircularProgressViewStyle(tint: Color.white))
+                if viewModel.state.isLoading {
+                    ProgressView("Searching Episodes..")
                 }
                 
-            }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                
+            }.background(Color.black)
             
-            if viewModel.state.isLoading {
-                ProgressView("Searching Episodes..")
-            }
-            
-            
-        }.background(Color.black)
+       }.navigationBarHidden(true).edgesIgnoringSafeArea([.top, .bottom])
      
     }
   
