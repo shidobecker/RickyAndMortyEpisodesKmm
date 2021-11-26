@@ -5,8 +5,9 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.model.EpisodeState
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.usecase.EpisodeDetailUseCase
+import br.com.shido.rickyandmortyepisodeskmm.episodes.common.model.EpisodeState
+import br.com.shido.rickyandmortyepisodeskmm.episodes.common.usecase.EpisodeDetailUseCase
+import br.com.shido.rickyandmortyepisodeskmm.episodes.episodes_detail.events.EpisodeDetailEvent
 
 class EpisodeDetailViewModel(private val useCase: EpisodeDetailUseCase) : ViewModel() {
 
@@ -21,8 +22,14 @@ class EpisodeDetailViewModel(private val useCase: EpisodeDetailUseCase) : ViewMo
         this.episodeImage = episodeImage
     }
 
+    fun onTriggerEvent(event: EpisodeDetailEvent) {
+        when (event) {
+            EpisodeDetailEvent.LoadEpisode -> fetchEpisode()
+        }
+    }
 
-    fun fetchEpisode() {
+
+    private fun fetchEpisode() {
         useCase.fetchEpisode(episodeId).collectCommon(viewModelScope) { dataState ->
             _episodeState.value =
                 _episodeState.value.copy(

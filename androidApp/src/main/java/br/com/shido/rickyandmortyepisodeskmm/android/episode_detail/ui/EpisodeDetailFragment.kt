@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,8 +29,10 @@ import br.com.shido.rickyandmortyepisodeskmm.android.components.bigText
 import br.com.shido.rickyandmortyepisodeskmm.android.components.regularText
 import br.com.shido.rickyandmortyepisodeskmm.android.episode_detail.viewmodel.EpisodeDetailViewModel
 import br.com.shido.rickyandmortyepisodeskmm.android.extensions.getImageByName
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.model.Character
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.model.EpisodeState
+import br.com.shido.rickyandmortyepisodeskmm.episodes.common.model.Character
+import br.com.shido.rickyandmortyepisodeskmm.episodes.common.model.Episode
+import br.com.shido.rickyandmortyepisodeskmm.episodes.common.model.EpisodeState
+import br.com.shido.rickyandmortyepisodeskmm.episodes.episodes_detail.events.EpisodeDetailEvent
 import com.skydoves.landscapist.glide.GlideImage
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -50,7 +53,7 @@ class EpisodeDetailFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                EpisodeDetailScreen2(viewModel.episodeState.value)
+                EpisodeDetailScreen(viewModel.episodeState.value)
             }
         }
     }
@@ -62,167 +65,49 @@ class EpisodeDetailFragment : Fragment() {
         val episodeImage = arguments?.getString(EPISODE_IMAGE_EXTRA) ?: ""
 
         viewModel.setArguments(episodeId, episodeImage)
-        viewModel.fetchEpisode()
+        viewModel.onTriggerEvent(EpisodeDetailEvent.LoadEpisode)
     }
+
 
     @ExperimentalUnitApi
     @Composable
     fun EpisodeDetailScreen(episodeState: EpisodeState) {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .background(Color.White)
-        ) {
-            Image(
-                bitmap = requireContext().getImageByName(viewModel.episodeImage),
-                contentDescription = null,
-                contentScale = ContentScale.FillBounds,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .background(color = Color.Transparent)
-            )
-
-
-            val episode = episodeState.episode
-
-            if (episodeState.isLoading) {
-                Text("Loading")
-            }
-
-
-            episode?.let {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.DarkGray),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        modifier = Modifier.padding(16.dp),
-                        color = Color.White,
-                        text = episode.name,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = bigText
-                    )
-                }
-                Column(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-
-                    Text(
-                        color = Color.Black,
-                        text = episode.episode,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                    Text(
-                        color = Color.Black,
-                        text = "Air Date: ${episode.airDate}",
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                }
-            }
-
-
-        }
-    }
-
-
-    @ExperimentalUnitApi
-    @Composable
-    fun EpisodeDetailScreen2(episodeState: EpisodeState) {
         val numberOfItemsByRow = LocalConfiguration.current.screenWidthDp / 200
 
         LazyColumn(
-            Modifier
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
         ) {
             val episode = episodeState.episode
 
             item {
-                Image(
-                    bitmap = requireContext().getImageByName(viewModel.episodeImage),
-                    contentDescription = null,
-                    contentScale = ContentScale.FillBounds,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .background(color = Color.Transparent)
-                )
-
+                EpisodeTopImage()
 
                 episode?.let {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color.DarkGray),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            modifier = Modifier.padding(16.dp),
-                            color = Color.White,
-                            text = "Summary",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = bigText
-                        )
-                    }
-                    Column(
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-
-                        Text(
-                            color = Color.Black,
-                            text = episode.name,
-                            modifier = Modifier.padding(top = 4.dp)
-                        )
-
-                        Text(
-                            color = Color.Black,
-                            text = episode.episode,
-                            modifier = Modifier.padding(top = 4.dp)
-                        )
-                        Text(
-                            color = Color.Black,
-                            text = "Air Date: ${episode.airDate}",
-                            modifier = Modifier.padding(top = 4.dp)
-                        )
-                    }
+                    EpisodeSummary(episode)
                 }
 
+                if (viewModel.episodeState.value.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .height(50.dp)
+                            .width(50.dp),
+                        strokeWidth = 2.dp,
+                        color = Color.DarkGray
+                    )
+                }
             }
 
             val characters = episode?.characters
 
-            item{
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.LightGray),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        modifier = Modifier.padding(16.dp),
-                        color = Color.White,
-                        text = "Character List:",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = bigText
-                    )
+            item {
+                episode?.let {
+                    CharactersTitle()
                 }
-             }
-
-
+            }
 
             characters?.let {
                 itemsIndexed(items = it.chunked(numberOfItemsByRow)) { index, rowItems ->
@@ -235,10 +120,87 @@ class EpisodeDetailFragment : Fragment() {
                         }
                     }
                     Spacer(Modifier.height(14.dp))
-
                 }
             }
 
+        }
+    }
+
+    @Composable
+    private fun EpisodeTopImage() {
+        Image(
+            bitmap = requireContext().getImageByName(viewModel.episodeImage),
+            contentDescription = null,
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .background(color = Color.Transparent)
+        )
+    }
+
+    @ExperimentalUnitApi
+    @Composable
+    private fun CharactersTitle() {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.LightGray),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                modifier = Modifier.padding(16.dp),
+                color = Color.White,
+                text = "Character List:",
+                fontWeight = FontWeight.Bold,
+                fontSize = bigText
+            )
+        }
+    }
+
+    @ExperimentalUnitApi
+    @Composable
+    private fun EpisodeSummary(episode: Episode) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.DarkGray),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                modifier = Modifier.padding(16.dp),
+                color = Color.White,
+                text = "Summary",
+                fontWeight = FontWeight.Bold,
+                fontSize = bigText
+            )
+        }
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            Text(
+                color = Color.Black,
+                text = episode.name,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+
+            Text(
+                color = Color.Black,
+                text = episode.episode,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+            Text(
+                color = Color.Black,
+                text = "Air Date: ${episode.airDate}",
+                modifier = Modifier.padding(top = 4.dp)
+            )
         }
     }
 
@@ -247,11 +209,17 @@ class EpisodeDetailFragment : Fragment() {
     @Composable
     fun CharacterCard(character: Character, modifier: Modifier = Modifier) {
         CardContainer {
-            Column(modifier = modifier.width(200.dp).height(200.dp), verticalArrangement = Arrangement.Center) {
+            Column(
+                modifier = modifier
+                    .width(200.dp)
+                    .height(200.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
                 GlideImage(
                     imageModel = character.image, modifier = Modifier
                         .height(100.dp)
-                        .fillMaxWidth().clip(RoundedCornerShape(6.dp))
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(6.dp))
                 )
                 Text(character.name, fontSize = bigText, modifier = Modifier.padding(4.dp))
                 Text(character.species, fontSize = regularText, modifier = Modifier.padding(4.dp))

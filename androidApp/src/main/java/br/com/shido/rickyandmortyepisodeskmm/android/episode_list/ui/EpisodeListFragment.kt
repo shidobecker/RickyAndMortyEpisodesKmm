@@ -27,8 +27,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.ExperimentalUnitApi
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -39,9 +37,9 @@ import br.com.shido.rickyandmortyepisodeskmm.android.components.bigText
 import br.com.shido.rickyandmortyepisodeskmm.android.components.regularText
 import br.com.shido.rickyandmortyepisodeskmm.android.episode_detail.ui.EpisodeDetailFragment
 import br.com.shido.rickyandmortyepisodeskmm.android.episode_list.viewmodel.EpisodeListViewModel
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.events.EpisodeListEvents
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.model.Episode
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.model.EpisodeListState
+import br.com.shido.rickyandmortyepisodeskmm.episodes.episodes_list.events.EpisodeListEvent
+import br.com.shido.rickyandmortyepisodeskmm.episodes.common.model.Episode
+import br.com.shido.rickyandmortyepisodeskmm.episodes.common.model.EpisodeListState
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class EpisodeListFragment : Fragment() {
@@ -74,7 +72,7 @@ class EpisodeListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTransparentStatusBar()
-        viewModel.onTriggerEvent(EpisodeListEvents.LoadEpisodes)
+        viewModel.onTriggerEvent(EpisodeListEvent.LoadEpisodes)
     }
 
 
@@ -130,7 +128,7 @@ class EpisodeListFragment : Fragment() {
             if (state.episodeList.isNotEmpty() && state.isLoading.not()) {
                 itemsIndexed(items = state.episodeList) { index, item ->
                     if (viewModel.shouldLoadMoreItems(index)) {
-                        viewModel.onTriggerEvent(EpisodeListEvents.NextPage)
+                        viewModel.onTriggerEvent(EpisodeListEvent.NextPage)
                     }
                     EpisodeList(episode = item)
                 }

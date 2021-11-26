@@ -4,10 +4,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.events.EpisodeListEvents
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.usecase.EpisodeListUseCase
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.model.Episode
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.model.EpisodeListState
+import br.com.shido.rickyandmortyepisodeskmm.episodes.episodes_list.events.EpisodeListEvent
+import br.com.shido.rickyandmortyepisodeskmm.episodes.episodes_list.usecase.EpisodeListUseCase
+import br.com.shido.rickyandmortyepisodeskmm.episodes.common.model.Episode
+import br.com.shido.rickyandmortyepisodeskmm.episodes.common.model.EpisodeListState
 
 
 class EpisodeListViewModel(private val useCase: EpisodeListUseCase) : ViewModel() {
@@ -31,12 +31,12 @@ class EpisodeListViewModel(private val useCase: EpisodeListUseCase) : ViewModel(
             }
     }
 
-    fun onTriggerEvent(event: EpisodeListEvents) {
+    fun onTriggerEvent(event: EpisodeListEvent) {
         when (event) {
-            EpisodeListEvents.LoadEpisodes -> {
+            EpisodeListEvent.LoadEpisodes -> {
                 loadEpisodes()
             }
-            EpisodeListEvents.NextPage -> {
+            EpisodeListEvent.NextPage -> {
                 nextPage()
             }
         }

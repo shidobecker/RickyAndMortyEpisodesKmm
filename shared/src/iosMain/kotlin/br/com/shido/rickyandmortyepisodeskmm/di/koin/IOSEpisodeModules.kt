@@ -1,9 +1,9 @@
 package br.com.shido.rickyandmortyepisodeskmm.di.koin
 
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.di.episodesCommonModule
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.di.episodesDetailCommonModule
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.usecase.EpisodeDetailUseCase
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.usecase.EpisodeListUseCase
+import br.com.shido.rickyandmortyepisodeskmm.episodes.episodes_list.di.episodesCommonModule
+import br.com.shido.rickyandmortyepisodeskmm.episodes.episodes_detail.di.episodesDetailCommonModule
+import br.com.shido.rickyandmortyepisodeskmm.episodes.common.usecase.EpisodeDetailUseCase
+import br.com.shido.rickyandmortyepisodeskmm.episodes.episodes_list.usecase.EpisodeListUseCase
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.context.startKoin

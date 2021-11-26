@@ -1,9 +1,9 @@
 package br.com.shido.rickyandmortyepisodeskmm.di.manual
 
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.datamapper.EpisodeDataMapper
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.datasource.EpisodesDataSource
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.repository.EpisodesRepository
-import br.com.shido.rickyandmortyepisodeskmm.episodes_list.repository.EpisodesRepositoryImpl
+import br.com.shido.rickyandmortyepisodeskmm.episodes.episodes_list.datamapper.EpisodeDataMapper
+import br.com.shido.rickyandmortyepisodeskmm.episodes.common.datasource.EpisodesDataSource
+import br.com.shido.rickyandmortyepisodeskmm.episodes.common.repository.EpisodesRepository
+import br.com.shido.rickyandmortyepisodeskmm.episodes.common.repository.EpisodesRepositoryImpl
 
 class EpisodeRepositoryModule(
     private val dataSource: EpisodesDataSource,

@@ -22,25 +22,36 @@ class EpisodeDetailViewModel: ObservableObject{
         self.episodeId = episodeId
         self.episodeDetailUseCase = episodeUseCase
         
-        fetchEpisode()
+        onTriggerEvent(event: EpisodeDetailEvent.LoadEpisode())
     }
     
- 
     
-    func fetchEpisode(){
+    func onTriggerEvent(event: EpisodeDetailEvent){
+        switch event {
+        case is EpisodeDetailEvent.LoadEpisode:
+            fetchEpisode()
+        default:
+            doNothing()
+        }
+    }
+    
+    
+    private func doNothing(){}
+    
+    private func fetchEpisode(){
         do {
             try episodeDetailUseCase.fetchEpisode(id: episodeId).collectCommon(coroutineScope: nil, callBack: { dataState in
                 if dataState != nil{
                     
                     let data = dataState?.data
                     let loading =  dataState?.isLoading
-                
+                    
                     self.updateState(isLoading: loading)
                     
                     if data != nil{
                         self.setEpisode(episode: data!)
                     }
-               
+                    
                     //Handle error from CommonDataState
                     let errorState  = dataState?.error
                     let isDefaultException = errorState?.isDefaultApplicationException()
@@ -54,7 +65,7 @@ class EpisodeDetailViewModel: ObservableObject{
         } catch  {
             print("Error Fetching Episode")
         }
-      
+        
     }
     
     
@@ -67,20 +78,17 @@ class EpisodeDetailViewModel: ObservableObject{
             error : currentState.error,
             episode: episode
         )
-        
-        print("State \(self.state.episode) ")
-        
     }
-     
     
-    private func updateState(isIdle: Bool? = nil, isLoading: Bool? = nil, episode: Episode? = nil){
+    //Update the state property with it's copy
+    private func updateState(isIdle: Bool? = nil, isLoading: Bool? = nil){
         let currentState = (self.state.copy() as! EpisodeState)
         self.state = self.state.doCopy(
             isIdle: currentState.isIdle,
             isLoading: isLoading ?? currentState.isLoading,
             error : currentState.error,
             episode : currentState.episode)
-                
+        
     }
     
     

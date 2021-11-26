@@ -18,7 +18,7 @@ class EpisodesListViewModel: ObservableObject{
     
     init(episodesUseCase: EpisodeListUseCase){
         self.episodesUseCase = episodesUseCase
-        onTriggerEvent(stateEvent: EpisodeListEvents.LoadEpisodes())
+        onTriggerEvent(stateEvent: EpisodeListEvent.LoadEpisodes())
     }
     
     
@@ -68,11 +68,11 @@ class EpisodesListViewModel: ObservableObject{
                 
     }
     
-    func onTriggerEvent(stateEvent: EpisodeListEvents){
+    func onTriggerEvent(stateEvent: EpisodeListEvent){
         switch stateEvent {
-        case is EpisodeListEvents.LoadEpisodes:
+        case is EpisodeListEvent.LoadEpisodes:
            loadEpisodes()
-        case is EpisodeListEvents.NextPage:
+        case is EpisodeListEvent.NextPage:
             nextPage()
         default:
             doNothing()

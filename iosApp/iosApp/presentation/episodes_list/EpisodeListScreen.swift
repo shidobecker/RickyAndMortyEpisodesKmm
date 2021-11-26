@@ -48,7 +48,7 @@ struct EpisodeListScreen: View {
                     
        
                     EpisodeList(episodeList: viewModel.state.episodeList, onNextPage: {
-                        viewModel.onTriggerEvent(stateEvent: EpisodeListEvents.NextPage())
+                        viewModel.onTriggerEvent(stateEvent: EpisodeListEvent.NextPage())
                     })
                     
                     if viewModel.state.episodeList.count > 0 && viewModel.state.isLoading{
