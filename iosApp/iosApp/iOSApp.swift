@@ -8,6 +8,8 @@ struct iOSApp: App {
     
     init() {
         IOSEpisodeModulesKt.doInitIosEpisodeDependencies()
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+        UINavigationBar.appearance().shadowImage = UIImage()
     }
      
 	var body: some Scene {

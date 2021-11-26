@@ -38,7 +38,9 @@ struct EpisodeList :  View{
                     
                     NavigationLink(destination: EpisodeDetailScreen(episodeId: episode.id)){
                         EmptyView()
-                    }
+                    }.navigationBarTitle(Text(""),displayMode: .inline)
+                    .navigationBarHidden(true)
+                     
                     
                 }
                 

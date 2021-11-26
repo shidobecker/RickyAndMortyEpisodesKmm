@@ -20,11 +20,15 @@ struct EpisodeListScreen: View {
     init(episodesUseCase: EpisodeListUseCase){
         self.episodesUseCase = episodesUseCase
         self.viewModel = EpisodesListViewModel(episodesUseCase: episodesUseCase)
+        
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+        UINavigationBar.appearance().shadowImage = UIImage()
     }
     
     
     
-    
+    @State var isNavigationBarHidden: Bool = true
+
     var body: some View {
        NavigationView{
             ZStack{
@@ -60,7 +64,8 @@ struct EpisodeListScreen: View {
                 
             }.background(Color.black)
             
-       }.navigationBarHidden(true).edgesIgnoringSafeArea([.top, .bottom])
+       }
+       .navigationBarTitle("Hidden Title", displayMode: .inline).navigationBarHidden(self.isNavigationBarHidden)
      
     }
   
